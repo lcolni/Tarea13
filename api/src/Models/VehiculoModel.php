@@ -4,6 +4,8 @@ namespace App\Models;
 class VehiculoModel {
     private $db;
 
+    // El Modelo es el ÚNICO que sabe de SQL
+
     public function __construct($db) {
         $this->db = $db;
     }

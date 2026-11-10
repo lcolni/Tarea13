@@ -2,17 +2,17 @@
 
 Integrante: Luis Rodriguez
 
-Web para ver, agregar y modificar los vehículos de la automotora. Usa la estructura de Docker de la clase y la base `MARCAS` / `VEHICULOS` de `api/config/init.sql`.
+Web para ver, agregar y modificar los vehículos de la automotora. Usa la estructura de Docker de la clase, Bootstrap y la base `MARCAS` / `VEHICULOS` de `api/config/init.sql`.
 
 ## Cómo levantarla
 
 Hace falta Docker Desktop encendido. En esta carpeta:
 
 ```bash
-docker compose up -d --build
+docker compose up -d
 ```
 
-La primera vez crea la base e importa las marcas y los autos de prueba.
+La primera vez arma la imagen, crea la base e importa las marcas y los autos de prueba.
 
 ## Direcciones
 

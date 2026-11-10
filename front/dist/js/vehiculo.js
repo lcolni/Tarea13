@@ -1,3 +1,5 @@
+// Datos de un auto y formulario para modificarlo.
+
 const aviso = document.querySelector('#aviso');
 const ficha = document.querySelector('#ficha');
 const form = document.querySelector('#formulario');
@@ -5,66 +7,89 @@ const titulo = document.querySelector('#titulo');
 const params = new URLSearchParams(window.location.search);
 const id = params.get('id');
 
-function opcionMarca(marca, seleccionada) {
-    const opcion = document.createElement('option');
-    opcion.value = marca.id_marca;
-    opcion.textContent = marca.nombre_marca + (marca.pais_origen ? ' (' + marca.pais_origen + ')' : '');
-    opcion.selected = String(marca.id_marca) === String(seleccionada);
-    return opcion;
+function mostrarAviso(tipo, texto) {
+    aviso.className = 'alert alert-' + tipo;
+    aviso.textContent = texto;
+}
+
+function precioTexto(valor) {
+    if (valor === null || valor === undefined || valor === '') {
+        return '-';
+    }
+    return '$ ' + valor;
 }
 
 function pintarFicha(auto) {
     const filas = [
         ['Marca', auto.nombre_marca || 'Sin marca'],
-        ['País de origen', auto.pais_origen || '—'],
+        ['País de origen', auto.pais_origen || '-'],
         ['Modelo', auto.modelo],
-        ['Año', auto.anio || '—'],
-        ['Precio', dinero(auto.precio)],
-        ['Estado', auto.estado || '—']
+        ['Año', auto.anio || '-'],
+        ['Precio', precioTexto(auto.precio)],
+        ['Estado', auto.estado || '-']
     ];
+
     ficha.innerHTML = '';
-    filas.forEach(([etiqueta, valor]) => {
-        const dt = document.createElement('dt');
-        const dd = document.createElement('dd');
-        dt.textContent = etiqueta;
-        dd.textContent = valor;
-        ficha.append(dt, dd);
+    filas.forEach(function (item) {
+        const tr = document.createElement('tr');
+        const th = document.createElement('th');
+        const td = document.createElement('td');
+        th.textContent = item[0];
+        td.textContent = item[1];
+        tr.append(th, td);
+        ficha.appendChild(tr);
     });
+
     titulo.textContent = (auto.nombre_marca ? auto.nombre_marca + ' ' : '') + auto.modelo;
+}
+
+function cargarMarcas(marcas, idMarca) {
+    const select = form.querySelector('[name="id_marca"]');
+    select.innerHTML = '<option value="">Elegí una marca</option>';
+    marcas.forEach(function (marca) {
+        const opcion = document.createElement('option');
+        opcion.value = marca.id_marca;
+        opcion.textContent = marca.nombre_marca;
+        if (marca.pais_origen) {
+            opcion.textContent += ' (' + marca.pais_origen + ')';
+        }
+        if (String(marca.id_marca) === String(idMarca)) {
+            opcion.selected = true;
+        }
+        select.appendChild(opcion);
+    });
 }
 
 async function cargar() {
     if (!id) {
-        mostrarAviso(aviso, 'error', 'Falta el identificador del auto.');
-        form.hidden = true;
+        mostrarAviso('danger', 'Falta el id del auto.');
+        form.classList.add('d-none');
         return;
     }
 
-    const [autoResp, marcasResp] = await Promise.all([
-        API.request('/vehiculos/' + id),
-        API.request('/marcas')
-    ]);
+    const autoResp = await API.request('/vehiculos/' + id);
+    const marcasResp = await API.request('/marcas');
 
     if (autoResp.status !== 'ok') {
-        mostrarAviso(aviso, 'error', autoResp.message || 'No se encontró el auto');
-        form.hidden = true;
+        mostrarAviso('danger', autoResp.message || 'No se encontró el auto');
+        form.classList.add('d-none');
         return;
     }
 
     const auto = autoResp.data;
     pintarFicha(auto);
-    const select = form.querySelector('[name="id_marca"]');
-    select.innerHTML = '<option value="">Elegí una marca</option>';
-    (marcasResp.data || []).forEach((marca) => select.appendChild(opcionMarca(marca, auto.id_marca)));
+    cargarMarcas(marcasResp.data || [], auto.id_marca);
     form.modelo.value = auto.modelo || '';
     form.anio.value = auto.anio || '';
     form.precio.value = auto.precio || '';
     form.estado.value = auto.estado || '';
 }
 
-form.addEventListener('submit', async (evento) => {
+form.addEventListener('submit', async function (evento) {
     evento.preventDefault();
-    if (!form.reportValidity()) return;
+    if (!form.reportValidity()) {
+        return;
+    }
 
     const respuesta = await API.request('/vehiculos/' + id, 'PUT', {
         id_marca: form.id_marca.value,
@@ -75,12 +100,12 @@ form.addEventListener('submit', async (evento) => {
     });
 
     if (respuesta.status !== 'ok') {
-        mostrarAviso(aviso, 'error', respuesta.message || 'No se pudieron guardar los cambios');
+        mostrarAviso('danger', respuesta.message || 'No se pudieron guardar los cambios');
         return;
     }
 
     pintarFicha(respuesta.data);
-    mostrarAviso(aviso, 'ok', respuesta.message);
+    mostrarAviso('success', respuesta.message);
 });
 
 cargar();

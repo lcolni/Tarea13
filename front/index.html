@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autos — Automotora</title>
+    <link rel="stylesheet" href="./dist/css/style.css">
+    <link rel="stylesheet" href="./dist/css/mobile.css">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="/front/index.html">
+            <strong>Automotora</strong>
+            <span>Gestión de vehículos</span>
+        </a>
+        <nav class="nav-links">
+            <a class="activo" href="/front/index.html">Listado</a>
+            <a href="./dist/pages/agregar.html">Agregar auto</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        <div class="page-head">
+            <div>
+                <h1>Autos registrados</h1>
+                <p>Elegí un vehículo para ver todos sus datos y modificarlos.</p>
+            </div>
+            <a class="boton" href="./dist/pages/agregar.html">Agregar auto</a>
+        </div>
+        <p id="aviso" class="aviso" hidden></p>
+        <section id="grilla" class="grilla"></section>
+    </main>
+
+    <script src="./dist/js/api.js"></script>
+    <script src="./dist/js/script.js"></script>
+</body>
+</html>

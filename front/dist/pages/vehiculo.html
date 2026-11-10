@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del auto</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/mobile.css">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="/front/index.html">
+            <strong>Automotora</strong>
+            <span>Gestión de vehículos</span>
+        </a>
+        <nav class="nav-links">
+            <a href="/front/index.html">Listado</a>
+            <a href="./agregar.html">Agregar auto</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        <div class="page-head">
+            <div>
+                <h1 id="titulo">Vehículo</h1>
+                <p>Datos guardados en la base y formulario para modificarlos.</p>
+            </div>
+            <a class="boton" href="/front/index.html">Volver al listado</a>
+        </div>
+
+        <p id="aviso" class="aviso" hidden></p>
+
+        <section class="panel">
+            <dl id="ficha" class="ficha"></dl>
+
+            <form id="formulario">
+                <div class="fila">
+                    <label>Marca
+                        <select name="id_marca" required>
+                            <option value="">Elegí una marca</option>
+                        </select>
+                    </label>
+                    <label>Modelo
+                        <input name="modelo" required maxlength="50" placeholder="Por ejemplo, Corolla">
+                    </label>
+                </div>
+                <div class="fila">
+                    <label>Año
+                        <input name="anio" type="number" min="1950" max="2100" placeholder="2024">
+                    </label>
+                    <label>Precio
+                        <input name="precio" type="number" min="0" step="0.01" placeholder="25000">
+                    </label>
+                </div>
+                <label>Estado
+                    <select name="estado" required>
+                        <option value="">Elegí un estado</option>
+                        <option value="Nuevo">Nuevo</option>
+                        <option value="Usado">Usado</option>
+                    </select>
+                </label>
+                <button type="submit">Guardar cambios</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/vehiculo.js"></script>
+</body>
+</html>

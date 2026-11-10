@@ -12,7 +12,7 @@ Hace falta Docker Desktop encendido. En esta carpeta:
 docker compose up -d
 ```
 
-La primera vez arma la imagen, crea la base e importa las marcas y los autos de prueba.
+La primera vez arma la imagen, crea la base e importa las marcas y los autos de prueba. En Docker el proyecto se llama `tarea_13`.
 
 ## Direcciones
 
